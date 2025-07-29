@@ -10,10 +10,6 @@ app = FastAPI()
 class EmailRequest(BaseModel):
     email: str
 
-class OtpRequest(BaseModel):
-    email: str
-    otp: str
-
 @app.get("/")
 def root():
     return {"message": "backend is online"}
