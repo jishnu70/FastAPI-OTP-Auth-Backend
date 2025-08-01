@@ -4,8 +4,8 @@ class AppSetting(BaseSettings):
     DATABASE_URL: str = ""
     SECRET_KEY : str = ""
 
-    GMAIL_ACCOUNT: str = ""
-    GMAIL_PASSWORD: str = ""
+    MAIL_ACCOUNT: str = ""
+    MAIL_PASSWORD: str = ""
 
     class Config:
         env_file=".env"

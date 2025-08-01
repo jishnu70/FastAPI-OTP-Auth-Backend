@@ -1,9 +1,12 @@
+# main.py
+
 from typing import Annotated
 from fastapi import FastAPI, status, Response, Depends
 import uvicorn
 from pydantic import BaseModel
 from background.OtpService import OtpService, get_otp_service
 from background.celery_app import send_otp_email
+from schemas.Otp import OtpRequest
 
 app = FastAPI()
 

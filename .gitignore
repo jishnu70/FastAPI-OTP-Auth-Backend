@@ -9,3 +9,6 @@ wheels/
 # Virtual environments
 .venv
 .env
+*.rdb
+ratelimit.py
+ratelimit_gemini.py

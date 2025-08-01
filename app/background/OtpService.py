@@ -40,7 +40,7 @@ class OtpService:
             raise OtpSendError("Failed to send email")
 
     def verify_code(self, to_email:str, verification_code:str)->bool:
-        print(f"Redis Type = {type(self.__redis)}")
+        # print(f"Redis Type = {type(self.__redis)}")
         otp = self.__redis.get(to_email)
         if otp and otp.decode("utf-8") == verification_code:
             self.__delete_the_code(to_email)
@@ -63,5 +63,5 @@ _otp_instance = None
 def get_otp_service():
     global _otp_instance
     if _otp_instance is None:
-        _otp_instance = OtpService(redis=redis_client, email=config.GMAIL_ACCOUNT, password=config.GMAIL_PASSWORD)
+        _otp_instance = OtpService(redis=redis_client, email=config.MAIL_ACCOUNT, password=config.MAIL_PASSWORD)
     return _otp_instance
