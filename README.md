@@ -1,154 +1,103 @@
-# 🔐 FastAPI OTP Authentication System
+# FastAPI OTP Auth Backend 🚀
 
-A production-ready email-based authentication system built with **FastAPI**, **Redis**, **Celery**, and **JWT tokens** — designed for modern backend applications with OTP-based email verification.
-
----
-
-## 🚀 Features
-
-- ✅ Async FastAPI backend using `SQLAlchemy`
-- ✅ One-Time Password (OTP) verification via email
-- ✅ Redis-backed in-memory OTP storage with expiration
-- ✅ Background task processing using Celery + Redis
-- ✅ JWT-based access and refresh tokens
-- ✅ Modular and extensible folder structure
-- ✅ Secure password hashing (`bcrypt`)
-- ✅ Clean architecture: models, services, routes, dependencies
+A backend project for OTP-based authentication using FastAPI, Redis, Celery, and JWT. Built with scalability, modularity, and real-world patterns in mind.
 
 ---
 
-## 🧰 Tech Stack
-
-- Python 3.11+
-- FastAPI
-- SQLAlchemy (async)
-- Celery
-- Redis
-- smtplib (email sending)
-- SQLite (local DB)
-- Pydantic v2
-- JWT (`pyjwt`)
+### ✨ Features
+- Register users with email OTP verification
+- Login flow secured via access & refresh tokens
+- Password hashing with bcrypt
+- OTP sending using Celery + Redis in background
+- Async SQLAlchemy + SQLite (swap with PostgreSQL easily)
+- Clean folder structure and reusable components
 
 ---
 
-## 📁 Folder Structure
-
-```
-project/
-├── background/         # Celery app + OTP service
-├── routes/             # Auth API routes
-├── models/             # SQLAlchemy user model
-├── schemas/            # Pydantic request/response models
-├── services/           # Business logic
-├── utils/              # JWT and security helpers
-├── config.py           # Environment config
-├── main.py             # Entry point
-└── requirements.txt
-```
+### 📦 Stack
+- **FastAPI** (async web framework)
+- **Redis** (task queue backend)
+- **Celery** (background OTP sender)
+- **SQLite** + **SQLAlchemy (async)**
+- **JWT** for secure token handling
+- **Uvicorn** as the ASGI server
+- **Passlib** for password hashing
+- **Pydantic v2**
 
 ---
 
-## ⚙️ Setup Instructions
+### 🚀 Getting Started
 
-### 1. Clone the repo and install dependencies
-```bash
-git clone https://github.com/yourname/fastapi-otp-auth.git
-cd fastapi-otp-auth
-uv venv .venv
-source .venv/bin/activate
-uv pip install -r requirements.txt
-```
+1. **Clone the repository:**
+  ```bash
+  git clone https://github.com/jishnu70/FastAPI-OTP-Auth.git
+  ```
 
-### 2. Configure environment
+2. **Install dependencies**
+   ```bash
+   uv pip install
+   ```
 
-Create a `.env` file in the root:
-```
-GMAIL_ACCOUNT=your-email@gmail.com
-GMAIL_PASSWORD=your-app-password
-SECRET_KEY=your-secret-key
-JWT_ALGORITHM=HS256
-```
+3. **Set environment variables**
+   Create a `.env` file at root:
+   ```env
+   DATABASE_URL=sqlite+aiosqlite:///./data.db
+   SECRET_KEY=your-secret-key
+   JWT_ALGORITHM=HS256
+   MAIL_ACCOUNT=your-email@gmail.com
+   MAIL_PASSWORD=your-app-password
+   ```
 
-Make sure you [generate an App Password](https://myaccount.google.com/apppasswords) for Gmail.
+4. **Run Redis**
+   ```bash
+   redis-server
+   ```
+
+5. **Run Celery**
+   ```bash
+   celery -A app.background.celery_app worker --loglevel=info
+   ```
+
+6. **Start the API**
+   ```bash
+   uv run app/main.py
+   ```
 
 ---
 
-### 3. Start Redis
+### 📁 Folder Structure
 
-If Redis isn't running already:
-
-```bash
-brew services start redis
 ```
-
----
-
-### 4. Run the backend + worker
-
-In **terminal 1**:
-```bash
-uvicorn main:app --reload
-```
-
-In **terminal 2**:
-```bash
-celery -A background.celery_app worker --loglevel=info
+app/
+├── authentication/      # Services & token logic
+├── background/          # Celery tasks & OTP logic
+├── dependencies/        # DI utils (e.g., current user)
+├── infrastructure/      # Redis client setup
+├── models/              # SQLAlchemy models
+├── routes/              # API routes
+├── schemas/             # Pydantic schemas
+├── config.py            # App settings
+├── database.py          # DB engine/session
+└── main.py              # App entry point
 ```
 
 ---
 
-## 📬 Sample Request Flow
-
-### Register:
-```
-POST /auth/register
-{
-  "username": "jishnu",
-  "email": "jishnu@example.com",
-  "password": "strongpass123",
-  "confirm_password": "strongpass123"
-}
-```
-
-### Verify OTP:
-```
-POST /auth/verify-otp
-{
-  "email": "jishnu@example.com",
-  "otp": "123456"
-}
-```
-
-### Login:
-```
-POST /auth/login
-{
-  "email": "jishnu@example.com",
-  "password": "strongpass123"
-}
-```
-
-### Refresh Access Token:
-```
-POST /auth/refresh-token
-{
-  "refresh_token": "<your_refresh_token>"
-}
-```
+### 🧪 Notes
+- You can test this with Postman, Thunder Client, etc.
+- Uses [`uv`](https://github.com/astral-sh/uv) instead of `requirements.txt` for dependency management
+- OTPs expire in 5 minutes (set in Redis)
+- Designed for learning, but with production-aligned structure
 
 ---
 
-## 🛡️ TODO / Future Improvements
-
-- [ ] Rate limiting on OTP send
-- [ ] Blacklisting refresh tokens
-- [ ] Add user logout endpoint
-- [ ] OTP retry limit per IP/email
-- [ ] Dockerfile & Redis container
-- [ ] Testing with pytest + httpx
+### 📌 Next Steps
+- [ ] Add rate limiting
+- [ ] Add resend OTP flow
+- [ ] Add password reset via OTP
+- [ ] Add logging in JSON format
 
 ---
 
-## 📜 License
-
-This project is licensed under the MIT License.
+**Built with learning, intention, and a focus on writing clean backend code.**
+Think of it as your backend backpack — light, useful, and ready for the road ahead.
