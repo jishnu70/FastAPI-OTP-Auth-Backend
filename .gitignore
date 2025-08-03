@@ -10,5 +10,7 @@ wheels/
 .venv
 .env
 *.rdb
+*.db
 ratelimit.py
 ratelimit_gemini.py
+req.txt

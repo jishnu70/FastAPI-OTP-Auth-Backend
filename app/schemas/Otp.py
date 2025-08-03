@@ -8,3 +8,10 @@ class OtpRequest(BaseModel):
 
 class OtpResponse(BaseModel):
     message: str
+
+class OtpLoginResponse(BaseModel):
+    taskID: str
+    message: str
+
+    class Config:
+        from_attributes = True

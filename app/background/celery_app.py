@@ -1,7 +1,7 @@
 # background/celery_app.py
 
 from celery import Celery
-from background.OtpService import OtpSendError, get_otp_service
+from app.background.OtpService import OtpSendError, get_otp_service
 
 celery_app = Celery(
     "background_worker",

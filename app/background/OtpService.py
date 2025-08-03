@@ -1,10 +1,12 @@
+# background/OtpService.py
+
 import random
 import smtplib
 from redis import Redis
 from email.message import EmailMessage
 import logging
-from infrastructure.redis_client import redis_client
-from config import config
+from app.infrastructure.redis_client import redis_client
+from app.config import config
 
 logger = logging.getLogger(__name__)
 

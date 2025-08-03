@@ -1,33 +1,43 @@
 # main.py
 
-from typing import Annotated
-from fastapi import FastAPI, status, Response, Depends
+from fastapi import FastAPI
 import uvicorn
-from pydantic import BaseModel
-from background.OtpService import OtpService, get_otp_service
-from background.celery_app import send_otp_email
-from schemas.Otp import OtpRequest
+from app.database import engine, Base
+from contextlib import asynccontextmanager
+from routes.authRoutes import authRoute
+import logging
 
-app = FastAPI()
+logger = logging.getLogger(__name__)
 
-class EmailRequest(BaseModel):
-    email: str
+async def init_db():
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        print("Database created successfully")
+    except Exception as e:
+        logger.error(f"Error initializing DB: {str(e)}")
+        raise
+
+async def close_db():
+    try:
+        await engine.dispose()
+        print("Database disposed successfully")
+    except Exception as e:
+        logger.error(f"Error closing DB: {str(e)}")
+        raise
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_db()
+    yield
+    await close_db()
+
+app = FastAPI(lifespan=lifespan)
+app.include_router(authRoute)
 
 @app.get("/")
 def root():
     return {"message": "backend is online"}
-
-@app.post("/")
-async def login(payload: EmailRequest):
-    task = send_otp_email.delay(payload.email)
-    return {"taskID": task.id, "message": "OTP sent"}
-
-@app.post("/verify-otp")
-def verify_the_otp(payload:OtpRequest, otp_service: OtpService = Depends(get_otp_service)):
-    result = otp_service.verify_code(payload.email, payload.otp)
-    if result:
-        return {"message": "otp verified"}
-    return Response(status_code=status.HTTP_400_BAD_REQUEST, content={"message":"wrong otp"})
 
 def main():
     uvicorn.run("main:app", host="localhost", port=8000, reload=True)

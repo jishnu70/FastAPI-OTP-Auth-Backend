@@ -1,3 +1,5 @@
+# schemas/Token.py
+
 from pydantic import BaseModel
 
 class TokenResponse(BaseModel):

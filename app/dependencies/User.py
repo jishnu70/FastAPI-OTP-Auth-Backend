@@ -35,7 +35,8 @@ async def get_current_user(db: Annotated[AsyncSession, Depends(get_db)], token: 
         logger.error(f"Error fetching current user: {e}")
         raise credentials_exception
 
-    user = await db.execute(select(User).filter_by(id = user_id))
+    result = await db.execute(select(User).filter_by(id = user_id))
+    user = result.scalar_one_or_none()
     if user is None:
         logger.error("get_currect_user: User fetched is None")
         raise credentials_exception

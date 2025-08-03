@@ -1,6 +1,6 @@
 # schemas/User.py
 
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, field_validator, ValidationInfo
 
 class UserCreate(BaseModel):
     username: str
@@ -9,9 +9,8 @@ class UserCreate(BaseModel):
     confirm_password: str
 
     @field_validator("confirm_password")
-    @classmethod
-    def passwords_match(cls, confirm_password:str, values):
-        password = values.get("password")
+    def passwords_match(cls, confirm_password:str, info: ValidationInfo):
+        password = info.data.get("password")
         if password and confirm_password != password:
             raise ValueError("Passwords do not match")
         return confirm_password
