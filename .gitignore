@@ -12,3 +12,4 @@ wheels/
 *.rdb
 *.db
 req.txt
+.DS_Store
