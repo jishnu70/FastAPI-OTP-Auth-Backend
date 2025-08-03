@@ -30,7 +30,7 @@ A backend project for OTP-based authentication using FastAPI, Redis, Celery, and
 
 1. **Clone the repository:**
   ```bash
-  git clone https://github.com/jishnu70/FastAPI-OTP-Auth.git
+  git clone https://github.com/jishnu70/FastAPI-OTP-Auth-Backend.git
   ```
 
 2. **Install dependencies**
